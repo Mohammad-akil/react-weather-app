@@ -8,24 +8,33 @@ import getFormattedWeatherData from "./services/weatherService";
 import { formatToLocalTime } from "./services/weatherService";
 const App = () => {
   const [query, setQuery] = useState({ q: "Baroda" });
+  const [units, setUnits] = useState("metric");
   const [weather, setWeather] = useState(null);
 
   const fetchWeather = async () => {
-    const data = await getFormattedWeatherData(query);
-    console.log(data);
+    const data = await getFormattedWeatherData({ ...query, units }).then(
+      (data) => {
+        console.log(data);
+        setWeather(data);
+      }
+    );
   };
   useEffect(() => {
     fetchWeather();
   }, [query]);
   return (
     <div className="mx-auto max-w-xl mt-4 py-5 px-4   bg-gradient-to-br from-cyan-700 to to-blue-700 h-fit shadow-xl shadow-gray-400">
-      <TopButtons />
-      <Inputs />
+      <TopButtons setQuery={setQuery} />
+      <Inputs setQuery={setQuery} />
 
-      <TimeAndLocation />
-      <TempratureDetails />
-      {/* <Forecast title={"Hourly Forecase"} />
+      {weather && (
+        <>
+          <TimeAndLocation weather={weather} />
+          <TempratureDetails weather={weather} />
+          {/* <Forecast title={"Hourly Forecase"} />
       <Forecast title={"Daily Forecase"} /> */}
+        </>
+      )}
     </div>
   );
 };
