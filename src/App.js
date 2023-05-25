@@ -1,16 +1,22 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import TopButtons from "./components/TopButtons";
 import Inputs from "./components/Inputs";
 import TimeAndLocation from "./components/TimeAndLocation";
 import TempratureDetails from "./components/TempratureDetails";
 import Forecast from "./components/Forecast";
 import getFormattedWeatherData from "./services/weatherService";
+import { formatToLocalTime } from "./services/weatherService";
 const App = () => {
+  const [query, setQuery] = useState({ q: "Baroda" });
+  const [weather, setWeather] = useState(null);
+
   const fetchWeather = async () => {
-    const data = await getFormattedWeatherData({ q: "Baroda" });
+    const data = await getFormattedWeatherData(query);
     console.log(data);
   };
-  fetchWeather();
+  useEffect(() => {
+    fetchWeather();
+  }, [query]);
   return (
     <div className="mx-auto max-w-xl mt-4 py-5 px-4   bg-gradient-to-br from-cyan-700 to to-blue-700 h-fit shadow-xl shadow-gray-400">
       <TopButtons />
@@ -18,8 +24,8 @@ const App = () => {
 
       <TimeAndLocation />
       <TempratureDetails />
-      <Forecast title={"Hourly Forecase"} />
-      <Forecast title={"Daily Forecase"} />
+      {/* <Forecast title={"Hourly Forecase"} />
+      <Forecast title={"Daily Forecase"} /> */}
     </div>
   );
 };

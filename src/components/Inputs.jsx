@@ -1,23 +1,10 @@
-import React, { useState } from "react";
-
 import { UilLocationPoint, UilSearch } from "@iconscout/react-unicons";
-const APIKEY = "94e1ea6b881470873de27002eed93f9a";
-const Inputs = () => {
-  const [city, setData] = useState("Baroda");
-  const [data, setresponse] = useState([]);
-  const handleClick = async () => {
-    try {
-      const res = await fetch(
-        `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${APIKEY}`
-      );
-      const data = await res.json();
-      console.log(data);
-      setresponse(data);
-    } catch (err) {
-      console.log(err);
-    }
-  };
+import { useState } from "react";
 
+const Inputs = () => {
+  const [data, setData] = useState("Baroda");
+
+  const handleClick = () => {};
   return (
     <div className="flex flex-row justify-center my-6 ">
       <div className="flex flex-row w-3/4 items-center justify-center space-x-4">
