@@ -42,11 +42,7 @@ const TempratureDetails = (weatherDetails) => {
       <p>{details}</p>
 
       <div className="flex flex-row items-center justify-around text-white py-3 w-full">
-        <img
-          src={iconUrlFromCode(icon)}
-          className="w-25 h-25  "
-          alt="logo..."
-        />
+        <img src={iconUrlFromCode(icon)} className="w-25 h-25 " alt="logo..." />
         <p className="flex flex-col space-y-2 ">{temp.toFixed()}°</p>
         <div className="flex flex-col  space-y-2">
           <div className="flex font-light text-sm items-center justify-start">

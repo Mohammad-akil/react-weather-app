@@ -1,13 +1,16 @@
 const API_KEY = "94e1ea6b881470873de27002eed93f9a";
 const BASE_URL = "https://api.openweathermap.org/data/2.5";
 
-const getWeatherData = (infoType, searchParams) => {
-  const url = new URL(BASE_URL + "/" + infoType);
+const getWeatherData = async (infoType, searchParams) => {
+  const url = new URL(`${BASE_URL}/${infoType}`);
   url.search = new URLSearchParams({ ...searchParams, appid: API_KEY });
   try {
-    return fetch(url).then((res) => res.json());
+    const response = await fetch(url);
+    const data = await response.json();
+
+    return data;
   } catch (err) {
-    console.log(err);
+    console.warn(err);
   }
 };
 
@@ -59,7 +62,6 @@ function getMonthName(month) {
 
 export const formatToLocalTime = (unixTimestamp) => {
   const date = new Date(unixTimestamp * 1000);
-
   const year = date.getFullYear();
   const month = date.getMonth() + 1;
   const day = date.getDate();
@@ -77,38 +79,60 @@ export const formatToLocalTime = (unixTimestamp) => {
 };
 
 const formatCurrentWeather = (data) => {
-  const {
-    coord: { lat, lon },
-    main: { temp, feels_like, temp_min, temp_max, humidity },
-    name,
-    dt,
-    sys: { country, sunrise, sunset },
-    weather,
-    wind: { speed },
-  } = data;
+  if (data.cod !== "404") {
+    const {
+      coord: { lat, lon },
+      main: { temp, feels_like, temp_min, temp_max, humidity },
+      name,
+      dt,
+      sys: { country, sunrise, sunset },
+      weather,
+      wind: { speed },
+    } = data;
 
-  const { main: details, icon } = weather[0];
-  const [formatedDate, formatedTime] = formatToLocalTime(dt);
+    const { main: details, icon } = weather[0];
+    const [formatedDate, formatedTime] = formatToLocalTime(dt);
 
-  return {
-    lat,
-    lon,
-    temp,
-    feels_like,
-    temp_min,
-    temp_max,
-    humidity,
-    name,
-    dt,
-    country,
-    sunrise,
-    sunset,
-    details,
-    icon,
-    speed,
-    formatedDate,
-    formatedTime,
-  };
+    return {
+      lat,
+      lon,
+      temp,
+      feels_like,
+      temp_min,
+      temp_max,
+      humidity,
+      name,
+      dt,
+      country,
+      sunrise,
+      sunset,
+      details,
+      icon,
+      speed,
+      formatedDate,
+      formatedTime,
+    };
+  } else {
+    return {
+      lat: 0,
+      lon: 0,
+      temp: 12,
+      feels_like: 123,
+      temp_min: 0,
+      temp_max: 100,
+      humidity: 50,
+      name: "sample",
+      dt: Date.now,
+      country: "IN",
+      sunrise: "645",
+      sunset: 345,
+      details: "df",
+      icon: "0er",
+      speed: 123,
+      formatedDate: "e2ewe",
+      formatedTime: "13",
+    };
+  }
 };
 
 const getFormattedWeatherData = async (searchParams) => {
@@ -116,6 +140,7 @@ const getFormattedWeatherData = async (searchParams) => {
     "weather",
     searchParams
   ).then(formatCurrentWeather);
+
   return formattedCurrentWeather;
 };
 

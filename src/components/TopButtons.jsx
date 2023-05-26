@@ -23,12 +23,27 @@ const TopButtons = ({ setQuery }) => {
       title: "Paris",
     },
   ];
+  const handleRequest = (title) => {
+    if (title) {
+      const city = cities.find((item) => item.title === title);
+      if (city) {
+        setQuery((prev) => {
+          return {
+            ...prev,
+            q: city.title,
+          };
+        });
+      } else {
+      }
+    } else {
+    }
+  };
   return (
     <div className="flex items-center justify-around gap-2 my-6">
       {cities.map((city) => (
         <button
           key={city.id}
-          onClick={() => setQuery(city.title)}
+          onClick={() => handleRequest(city.title)}
           className="text-white text-lg font-medium"
         >
           {city.title}
